@@ -3,8 +3,10 @@ const app = express();
 const port = 3000;
 const mails = require("./mails");
 const mailinglist = require("./mailinglist");
-
 const nodemailer = require("nodemailer");
+
+let counter = 0;
+let wrongEmails = [];
 
 async function sendEmails() {
   let myEmails = 0;
@@ -26,7 +28,7 @@ async function sendEmails() {
 
   let subject = "Hello";
   let text = "message";
-  let html = "html tags";
+  let html = "";
 
   for (let x in mailinglist.emails) {
     let response = await mail(
@@ -39,7 +41,10 @@ async function sendEmails() {
     );
 
     if (response) {
+      counter = counter + 1;
     } else {
+      wrongEmails.push(mailinglist.emails[x]);
+
       myEmails = +1;
       smtp.host = mails.emails[myEmails].host;
       smtp.port = mails.emails[myEmails].port;
@@ -72,6 +77,6 @@ async function mail(transporter, from, to, subject, text, html) {
   return info;
 }
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Example app listening at http://localhost:${port}`);
+// });
