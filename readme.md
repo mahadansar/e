@@ -7,4 +7,5 @@ write ->
 npm install
 
 after settings ->
+write in terminal ->
 node index.js
